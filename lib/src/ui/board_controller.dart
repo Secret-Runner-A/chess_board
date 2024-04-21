@@ -26,6 +26,9 @@ class BoardController extends StatefulWidget {
   /// Called when the premove is changed.
   final void Function(Move?)? onSetPremove;
 
+  /// Called when the piece is tapped.
+  final void Function(int square)? onPieceTap;
+
   /// Called when a premove is triggered.
   final void Function(Move)? onPremove;
 
@@ -67,6 +70,9 @@ class BoardController extends StatefulWidget {
   /// Animation curve for piece movements.
   /// Defaults to [Curves.easeInQuad].
   final Curve animationCurve;
+
+  /// Draws a widget under the markers.
+  final Widget? Function(BuildContext context, int file, int rank, double squareSize)? markerUnderlayBuilder;
 
   /// Opacity of overlay pieces shown on the board resulting from promotion
   /// or dropping premoves.
@@ -123,6 +129,7 @@ class BoardController extends StatefulWidget {
     this.markerTheme,
     this.onMove,
     this.onSetPremove,
+    this.onPieceTap,
     this.onPremove,
     this.promotionBehaviour = PromotionBehaviour.alwaysSelect,
     this.pieceHierarchy = Squares.defaultPieceHierarchy,
@@ -137,6 +144,7 @@ class BoardController extends StatefulWidget {
     this.premovePieceOpacity = Squares.defaultPremovePieceOpacity,
     this.labelConfig = LabelConfig.standard,
     this.backgroundConfig = BackgroundConfig.standard,
+    this.markerUnderlayBuilder,
     this.background,
     this.piecePadding = 0.0,
     this.overlays = const [],
@@ -196,6 +204,7 @@ class _BoardControllerState extends State<BoardController> {
       animationDuration: widget.animationDuration,
       animationCurve: widget.animationCurve,
       selection: selection,
+      markerUnderlayBuilder: widget.markerUnderlayBuilder,
       target: target,
       pieceSelectors: pieceSelectors,
       markers: dests.map((e) => e.to).toList(),
@@ -262,6 +271,7 @@ class _BoardControllerState extends State<BoardController> {
   }
 
   void _onTap(int square) {
+    widget.onPieceTap?.call(square);
     if (widget.playState == PlayState.ourTurn) {
       return _handleMoveTap(square, _onMove);
     }

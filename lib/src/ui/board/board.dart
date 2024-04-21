@@ -118,6 +118,9 @@ class Board extends StatelessWidget {
   /// square it is on. For example, 0.05 will add 5% padding to each side.
   final double piecePadding;
 
+  /// Draws a widget under the markers.
+  final Widget? Function(BuildContext context, int file, int rank, double squareSize)? markerUnderlayBuilder;
+
   Board({
     super.key,
     required this.state,
@@ -128,6 +131,7 @@ class Board extends StatelessWidget {
     MarkerTheme? markerTheme,
     this.selection,
     this.target,
+    this.markerUnderlayBuilder,
     this.pieceSelectors = const [],
     this.draggable = true,
     this.dragFeedbackSize = 2.0,
@@ -167,6 +171,7 @@ class Board extends StatelessWidget {
                 size: size,
                 orientation: state.orientation,
                 theme: theme,
+                markerUnderlayBuilder: markerUnderlayBuilder,
                 highlights: generateHighlights(
                   state: state,
                   selection: selection,

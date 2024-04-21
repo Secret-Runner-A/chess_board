@@ -21,6 +21,7 @@ class PieceSet {
 
   /// The builders used to create the widgets to represent pieces.
   final Map<String, WidgetBuilder> pieces;
+
   const PieceSet({required this.pieces});
 
   /// Build a piece `Widget` for [symbol].

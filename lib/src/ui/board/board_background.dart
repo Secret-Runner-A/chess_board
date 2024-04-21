@@ -27,12 +27,15 @@ class BoardBackground extends StatelessWidget {
   /// Widget builders for the various types of square highlights used.
   late final MarkerTheme markerTheme;
 
+  /// Draws a widget under the markers.
+  final Widget? Function(BuildContext context, int file, int rank, double squareSize)? markerUnderlayBuilder;
   BoardBackground({
     super.key,
     this.config = BackgroundConfig.standard,
     this.size = BoardSize.standard,
     this.orientation = Squares.white,
     this.theme = BoardTheme.blueGrey,
+    this.markerUnderlayBuilder,
     this.highlights = const {},
     this.markers = const {},
     MarkerTheme? markerTheme,
@@ -73,12 +76,19 @@ class BoardBackground extends StatelessWidget {
           : markerTheme.empty(context, squareSize, theme.highlight(m.colour));
     }
 
+    final markerUnderlays = markerUnderlayBuilder?.call(context, file, rank, squareSize);
+
     return AnimatedDecorationContainer(
       duration: const Duration(milliseconds: 100),
       decoration: config.squareDecoration.copyWith(color: squareColour),
       width: squareSize,
       height: squareSize,
-      child: marker,
+      child: Stack(
+        children: [
+          if (markerUnderlays != null) markerUnderlays,
+          if (marker != null) marker,
+        ],
+      ),
     );
   }
 }
