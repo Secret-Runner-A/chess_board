@@ -57,13 +57,13 @@ class Piece extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!interactible) return IgnorePointer(child:  FittedBox(child: child));
+    if (!interactible) return IgnorePointer(child: FittedBox(child: child));
     Widget piece = GestureDetector(
       child: child,
       onTap: onTap,
       onDoubleTap: onDoubleTap,
     );
-    if (!draggable) return  FittedBox(child: piece);
+    if (!draggable) return FittedBox(child: piece);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -89,7 +89,7 @@ class Piece extends StatelessWidget {
               height: fbSize,
               child: Material(
                 color: Colors.transparent, // <-- Add this, if needed
-                child:  FittedBox(child: piece),
+                child: FittedBox(child: piece),
               ),
             ),
           ),
@@ -98,7 +98,7 @@ class Piece extends StatelessWidget {
             opacity: 0.5,
             child: Material(
               color: Colors.transparent, // <-- Add this, if needed
-              child:  FittedBox(child: child),
+              child: FittedBox(child: child),
             ),
           ),
           onDragStarted: onDragStarted,
