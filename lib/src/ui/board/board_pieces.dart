@@ -27,6 +27,9 @@ class BoardPieces extends StatefulWidget {
   /// Called when a piece is tapped.
   final void Function(int)? onTap;
 
+  /// Called when a piece is tapped.
+  final void Function(int)? onDoubleTap;
+
   /// Called when a drag is started.
   final void Function(int)? onDragStarted;
 
@@ -47,6 +50,10 @@ class BoardPieces extends StatefulWidget {
   /// Which players' pieces we can drag.
   final PlayerSet dragPermissions;
 
+  /// The size of the piece being dragged will be multiplied by this.
+  /// 1.5 is a good value for mobile, but 1.0 is preferable for web.
+  final double dragFeedbackSize;
+
   const BoardPieces({
     super.key,
     required this.pieceSet,
@@ -57,7 +64,9 @@ class BoardPieces extends StatefulWidget {
     this.animationDuration = Squares.defaultAnimationDuration,
     this.animationCurve = Squares.defaultAnimationCurve,
     this.onTap,
+    this.onDoubleTap,
     this.onDragStarted,
+    this.dragFeedbackSize = 2.0,
     this.onDragCancelled,
     this.onDragEnd,
     this.ignoreGestures = false,
@@ -119,13 +128,15 @@ class _BoardPiecesState extends State<BoardPieces> {
         padding: EdgeInsets.all(widget.piecePadding * squareSize),
         child: Piece(
           child: piece,
-          draggable: currentDrag != null ? currentDrag == id : draggable,
+          dragFeedbackSize: widget.dragFeedbackSize,
+          // draggable: currentDrag != null ? currentDrag == id : draggable,
           interactible: currentDrag == null || currentDrag == id,
           move: PartialMove(
             from: id,
             piece: symbol,
           ),
           onTap: () => widget.onTap?.call(id),
+          onDoubleTap: () => widget.onDoubleTap?.call(id),
           onDragStarted: () => _onDragStarted(id),
           onDragCancelled: () => _onDragCancelled(id),
           onDragEnd: (details) => _onDragEnd(id, details),
@@ -156,6 +167,7 @@ class _BoardPiecesState extends State<BoardPieces> {
   }
 
   void _onDragStarted(int id) {
+    print("On drag started $id");
     setState(() => currentDrag = id);
     widget.onDragStarted?.call(id);
   }

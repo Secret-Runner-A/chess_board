@@ -28,6 +28,9 @@ class Piece extends StatelessWidget {
   /// Called when the piece is tapped.
   final VoidCallback? onTap;
 
+  /// Called when the piece is on double tapped.
+  final VoidCallback? onDoubleTap;
+
   /// Called when a drag is started.
   final VoidCallback? onDragStarted;
 
@@ -46,6 +49,7 @@ class Piece extends StatelessWidget {
     this.dragFeedbackSize = 2.0,
     this.dragFeedbackOffset = const Offset(0.0, -1.0),
     this.onTap,
+    this.onDoubleTap,
     this.onDragStarted,
     this.onDragCancelled,
     this.onDragEnd,
@@ -53,12 +57,13 @@ class Piece extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!interactible) return IgnorePointer(child: child);
+    if (!interactible) return IgnorePointer(child:  FittedBox(child: child));
     Widget piece = GestureDetector(
       child: child,
       onTap: onTap,
+      onDoubleTap: onDoubleTap,
     );
-    if (!draggable) return piece;
+    if (!draggable) return  FittedBox(child: piece);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -82,13 +87,19 @@ class Piece extends StatelessWidget {
             child: SizedBox(
               width: fbSize,
               height: fbSize,
-              child: piece,
+              child: Material(
+                color: Colors.transparent, // <-- Add this, if needed
+                child:  FittedBox(child: piece),
+              ),
             ),
           ),
           dragAnchorStrategy: pointerDragAnchorStrategy,
           childWhenDragging: Opacity(
             opacity: 0.5,
-            child: piece,
+            child: Material(
+              color: Colors.transparent, // <-- Add this, if needed
+              child:  FittedBox(child: child),
+            ),
           ),
           onDragStarted: onDragStarted,
           onDraggableCanceled: (_, __) => onDragCancelled?.call(),

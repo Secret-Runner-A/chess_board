@@ -58,6 +58,9 @@ class Board extends StatelessWidget {
   /// Called when a square is tapped.
   final void Function(int)? onTap;
 
+  /// Called when a square is double tapped
+  final void Function(int)? onDoubleTap;
+
   /// Called when a piece selector receives user input.
   final void Function(PieceSelectorData data, int i)? onPieceSelected;
 
@@ -121,6 +124,7 @@ class Board extends StatelessWidget {
   /// Draws a widget under the markers.
   final Widget? Function(BuildContext context, int file, int rank, double squareSize)? markerUnderlayBuilder;
 
+
   Board({
     super.key,
     required this.state,
@@ -138,6 +142,7 @@ class Board extends StatelessWidget {
     this.dragFeedbackOffset = const Offset(0.0, -1.0),
     this.dragPermissions = PlayerSet.both,
     this.dragTargetFeedback,
+    this.onDoubleTap,
     this.onTap,
     this.onPieceSelected,
     this.onDragCancel,
@@ -206,8 +211,10 @@ class Board extends StatelessWidget {
               BoardPieces(
                 pieceSet: pieceSet,
                 state: state,
+                dragFeedbackSize: dragFeedbackSize,
                 size: size,
                 onTap: onTap,
+                onDoubleTap: onDoubleTap,
                 onDragStarted: onTap,
                 animatePieces: animatePieces,
                 animationDuration: animationDuration,
