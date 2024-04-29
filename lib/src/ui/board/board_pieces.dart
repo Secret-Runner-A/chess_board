@@ -83,13 +83,34 @@ class _BoardPiecesState extends State<BoardPieces> {
   bool animate = true;
   bool afterDrag = false; // track drags so they're not animated
 
+  bool ListEQuality(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
   @override
   void didUpdateWidget(covariant BoardPieces oldWidget) {
     // This prevents the animation from repeating in cases where it shouldn't,
     // e.g. if the board is rotated. It would also be possible to do this with
     // collection's ListEquality or something but this seems efficient.
     animate =
-        oldWidget.state.board.join() != widget.state.board.join() && !afterDrag;
+        !ListEQuality(oldWidget.state.board, widget.state.board) && !afterDrag;
+
+    final a = oldWidget.state.board.join();
+    final b = widget.state.board.join();
+
+    print("a vs b: $a vs $b, same ${a == b}");
+    print("oldWidget is ${oldWidget.state.board}");
+    print("widget is ${widget.state.board}");
+    final hasChanged  = oldWidget.state.board.join() != widget.state.board.join();
+    print("hasChanged is $hasChanged");
+    print("animate is $animate, afterDrag is $afterDrag");
+
+    // int id = widget.size.square(rank, file, widget.state.orientation);
+    // if (id == 8) {
+    // }
     afterDrag = false;
     super.didUpdateWidget(oldWidget);
   }
@@ -143,6 +164,9 @@ class _BoardPiecesState extends State<BoardPieces> {
         ),
       ),
     );
+    if (widget.state.lastFrom == 8 && widget.state.lastFrom == id){
+      print("Last from is 8");
+    }
     if (widget.state.lastTo == id &&
         widget.state.lastFrom != Squares.hand &&
         symbol.isNotEmpty &&
