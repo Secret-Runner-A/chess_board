@@ -73,3 +73,14 @@ build/
 !**/ios/**/default.mode2v3
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
+.idea/workspace.xml
+.fvm/
+
+node_modules/
+
+
+.DS_Store
+.idea/workspace.xml
+.fvm/
+node_modules/
+
